@@ -31,7 +31,7 @@ keep_cols:
     - photo
 css_selector:
   url: none
-  price: ".object-header__price"
+  price: "json-ld-price" #"price-sale" #".flex gap-2 font-bold" #".object-header__price" "price-sale"
   address: ".object-header__title"
   descrip: ".object-description-body"
   listed_since: ".fd-align-items-center:nth-child(6) span"
