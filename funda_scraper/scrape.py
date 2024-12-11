@@ -285,12 +285,24 @@ class FundaScraper(object):
     @staticmethod
     def get_value_from_css(soup: BeautifulSoup, selector: str) -> str:
         """Extracts data from HTML using a CSS selector."""
-        result = soup.select(selector)
-        if len(result) > 0:
-            result = result[0].text
+        if selector == "json-ld-price":
+            # Locate the script tag containing JSON-LD data
+            script_tag = soup.find("script", type="application/ld+json")
+            if script_tag:
+                try:
+                    json_data = json.loads(script_tag.string)
+                    # Extract the price from the JSON structure
+                    return str(json_data.get("offers", {}).get("price", "na"))
+                except json.JSONDecodeError:
+                    return "na"
+            return "na"
         else:
-            result = "na"
-        return result
+            result = soup.select(selector)
+            if len(result) > 0:
+                result = result[0].text
+            else:
+                result = "na"
+            return result
 
     def scrape_one_link(self, link: str) -> List[str]:
         """Scrapes data from a single property link."""

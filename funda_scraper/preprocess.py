@@ -13,7 +13,8 @@ from funda_scraper.config.core import config
 def clean_price(x: str) -> int:
     """Clean the 'price' and transform from string to integer."""
     try:
-        return int(str(x).split(" ")[1].replace(".", ""))
+        # return int(str(x).split(" ")[1].replace(".", ""))
+        return int(str(x).split(" ")[0].replace(".", ""))
     except ValueError:
         return 0
     except IndexError:
@@ -174,10 +175,10 @@ def preprocess_data(
 
     # Price
     price_col = "price_sold" if is_past else "price"
-    df["price"] = df[price_col].apply(clean_price)
-    df = df[df["price"] != 0]
+    df["price"] = df[price_col].apply(clean_price)  # gives error, check clean_price function
+    # df = df[df["price"] != 0]
     df["living_area"] = df["living_area"].apply(clean_living_area)
-    df = df[df["living_area"] != 0]
+    # df = df[df["living_area"] != 0]
     df["price_m2"] = round(df.price / df.living_area, 1)
 
     # Location
